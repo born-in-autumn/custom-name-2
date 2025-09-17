@@ -12,6 +12,7 @@ model Post {
   title     String
   slug      String   @unique
   content   String
+  tags      String?  // 存储标签，用逗号分隔
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

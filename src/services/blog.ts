@@ -14,6 +14,7 @@ export class BlogService {
       title: post.title,
       slug: post.slug,
       content: post.content,
+      tags: post.tags,
       createdAt: post.createdAt.toISOString(),
       updatedAt: post.updatedAt.toISOString(),
     }));
@@ -31,6 +32,7 @@ export class BlogService {
       title: post.title,
       slug: post.slug,
       content: post.content,
+      tags: post.tags,
       createdAt: post.createdAt.toISOString(),
       updatedAt: post.updatedAt.toISOString(),
     };
@@ -48,6 +50,7 @@ export class BlogService {
       title: post.title,
       slug: post.slug,
       content: post.content,
+      tags: post.tags,
       createdAt: post.createdAt.toISOString(),
       updatedAt: post.updatedAt.toISOString(),
     };
@@ -57,12 +60,14 @@ export class BlogService {
     title: string;
     slug: string;
     content: string;
+    tags?: string;
   }): Promise<BlogPost> {
     const post = await prisma.post.create({
       data: {
         title: data.title,
         slug: data.slug,
         content: data.content,
+        tags: data.tags,
       },
     });
 
@@ -71,6 +76,7 @@ export class BlogService {
       title: post.title,
       slug: post.slug,
       content: post.content,
+      tags: post.tags,
       createdAt: post.createdAt.toISOString(),
       updatedAt: post.updatedAt.toISOString(),
     };
@@ -82,6 +88,7 @@ export class BlogService {
       title?: string;
       slug?: string;
       content?: string;
+      tags?: string;
     }
   ): Promise<BlogPost | null> {
     const post = await prisma.post.update({
@@ -94,6 +101,7 @@ export class BlogService {
       title: post.title,
       slug: post.slug,
       content: post.content,
+      tags: post.tags,
       createdAt: post.createdAt.toISOString(),
       updatedAt: post.updatedAt.toISOString(),
     };

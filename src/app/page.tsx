@@ -11,7 +11,12 @@ export default async function Home() {
         <header className="mb-16">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold" style={{ color: '#655cd6' }}>张三</h1>
+              <h1 
+                className="text-3xl font-bold transition-colors hover:underline cursor-pointer" 
+                style={{ color: '#655cd6' }}
+              >
+                张三
+              </h1>
             </div>
             <nav className="flex space-x-8">
               <Link
@@ -50,9 +55,19 @@ export default async function Home() {
         <main>
           <div className="space-y-6">
             {/* 表头 */}
-            <div className="flex justify-between items-center py-3" style={{ borderBottom: '3px solid rgb(231, 234, 239.5)' }}>
-              <h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Title</h3>
-              <h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Date</h3>
+            <div className="flex justify-between items-center" style={{ borderBottom: '3px solid rgb(231, 234, 239.5)' }}>
+              <h3 
+                className="text-sm uppercase tracking-wide" 
+                style={{ fontWeight: 600, color: '#373c44' }}
+              >
+                Title
+              </h3>
+              <h3 
+                className="text-sm uppercase tracking-wide" 
+                style={{ fontWeight: 600, color: '#373c44' }}
+              >
+                Date
+              </h3>
             </div>
             
             {posts.map((post) => (
@@ -62,7 +77,7 @@ export default async function Home() {
                   className="flex justify-between items-center py-4 border-b border-gray-100 hover:border-gray-200 transition-colors"
                 >
                   <h3 
-                    className="font-medium transition-colors"
+                    className="font-medium transition-colors cursor-pointer"
                     style={{ 
                       color: '#181c25',
                       fontSize: '24px',
@@ -79,7 +94,7 @@ export default async function Home() {
                       fontSize: '24px'
                     }}
                   >
-                    {new Date(post.createdAt).toLocaleDateString('zh-CN')}
+                    {new Date(post.createdAt).toISOString().split('T')[0]}
                   </time>
                 </Link>
               </article>

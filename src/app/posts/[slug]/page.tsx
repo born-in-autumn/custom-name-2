@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { BlogPost } from '@/types/blog';
+import TagsDisplay from '@/components/TagsDisplay';
 
 interface PostPageProps {
   params: {
@@ -41,9 +42,10 @@ export default async function PostPage({ params }: PostPageProps) {
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             {post.title}
           </h1>
-          <div className="text-sm text-gray-500">
-            {new Date(post.createdAt).toLocaleDateString('zh-CN')}
+          <div className="text-sm text-gray-500 mb-4">
+            {new Date(post.createdAt).toISOString().split('T')[0]}
           </div>
+          <TagsDisplay tags={post.tags} />
         </header>
         
         <article className="prose prose-lg max-w-none">

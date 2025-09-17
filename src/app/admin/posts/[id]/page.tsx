@@ -29,6 +29,7 @@ export default function EditPostPage() {
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [content, setContent] = useState('');
+  const [tags, setTags] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
@@ -48,6 +49,7 @@ export default function EditPostPage() {
         setTitle(postData.title);
         setSlug(postData.slug);
         setContent(postData.content);
+        setTags(postData.tags || '');
       } catch (err) {
         setError(err instanceof Error ? err.message : '加载文章失败');
       } finally {
@@ -96,6 +98,7 @@ export default function EditPostPage() {
           title: title.trim(),
           slug: slug.trim(),
           content: content.trim(),
+          tags: tags.trim(),
         }),
       });
 
@@ -227,6 +230,23 @@ export default function EditPostPage() {
               />
               <p className="mt-1 text-sm text-gray-500">
                 文章访问地址：/posts/{slug || 'your-slug'}
+              </p>
+            </div>
+
+            <div>
+              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+                标签
+              </label>
+              <input
+                type="text"
+                id="tags"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                placeholder="生活，技术，编程"
+              />
+              <p className="mt-1 text-sm text-gray-500">
+                使用逗号或顿号分隔多个标签，例如：生活，技术，编程
               </p>
             </div>
 

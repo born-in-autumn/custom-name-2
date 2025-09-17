@@ -16,7 +16,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { title, slug, content } = body;
+    const { title, slug, content, tags } = body;
 
     if (!title || !slug || !content) {
       return NextResponse.json(
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const post = await BlogService.createPost({ title, slug, content });
+    const post = await BlogService.createPost({ title, slug, content, tags });
     return NextResponse.json(post, { status: 201 });
   } catch (error) {
     return NextResponse.json(
