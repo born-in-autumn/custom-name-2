@@ -1,32 +1,25 @@
 import Link from "next/link";
-import { BlogPost } from "@/types/blog";
-
-async function getPosts(): Promise<BlogPost[]> {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/posts`, {
-      cache: 'no-store',
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch posts');
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    return [];
-  }
-}
+import { BlogService } from "@/services/blog";
 
 export default async function Home() {
-  const posts = await getPosts();
+  const posts = await BlogService.getAllPosts();
 
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-6 py-12">
         <header className="mb-12">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">我的博客</h1>
-          <p className="text-xl text-gray-600">分享我的想法和经历</p>
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-5xl font-bold text-gray-900 mb-4">我的博客</h1>
+              <p className="text-xl text-gray-600">分享我的想法和经历</p>
+            </div>
+            <Link
+              href="/admin"
+              className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+            >
+              管理后台
+            </Link>
+          </div>
         </header>
 
         <main>
