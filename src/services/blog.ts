@@ -36,6 +36,23 @@ export class BlogService {
     };
   }
 
+  static async getPostById(id: string): Promise<BlogPost | null> {
+    const post = await prisma.post.findUnique({
+      where: { id },
+    });
+
+    if (!post) return null;
+
+    return {
+      id: post.id,
+      title: post.title,
+      slug: post.slug,
+      content: post.content,
+      createdAt: post.createdAt.toISOString(),
+      updatedAt: post.updatedAt.toISOString(),
+    };
+  }
+
   static async createPost(data: {
     title: string;
     slug: string;

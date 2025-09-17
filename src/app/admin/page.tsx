@@ -70,7 +70,7 @@ export default async function AdminPage() {
                           查看
                         </Link>
                         <Link
-                          href={`/admin/edit/${post.id}`}
+                          href={`/admin/posts/${post.id}`}
                           className="text-indigo-600 hover:text-indigo-900"
                         >
                           编辑

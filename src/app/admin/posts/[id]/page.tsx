@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import MarkdownEditor from '@/components/MarkdownEditor';
 
@@ -11,15 +11,54 @@ const MarkdownPreview = dynamic(() => import('@/components/MarkdownPreview'), {
   loading: () => <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center">加载预览中...</div>
 });
 
-export default function NewPostPage() {
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export default function EditPostPage() {
   const router = useRouter();
+  const params = useParams();
+  const postId = params.id as string;
+  
+  const [post, setPost] = useState<BlogPost | null>(null);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [content, setContent] = useState('');
-  const [isPublishing, setIsPublishing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
   const [showPreview, setShowPreview] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
+  // 加载文章数据
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await fetch(`/api/admin/posts/${postId}`);
+        if (!response.ok) {
+          throw new Error('文章不存在');
+        }
+        const postData = await response.json();
+        setPost(postData);
+        setTitle(postData.title);
+        setSlug(postData.slug);
+        setContent(postData.content);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '加载文章失败');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (postId) {
+      fetchPost();
+    }
+  }, [postId]);
 
   // 自动生成 slug
   const generateSlug = (title: string) => {
@@ -38,18 +77,18 @@ export default function NewPostPage() {
     }
   };
 
-  const handlePublish = async () => {
+  const handleSave = async () => {
     if (!title.trim() || !slug.trim() || !content.trim()) {
       setError('请填写所有必填字段');
       return;
     }
 
-    setIsPublishing(true);
+    setIsSaving(true);
     setError('');
 
     try {
-      const response = await fetch('/api/posts', {
-        method: 'POST',
+      const response = await fetch(`/api/admin/posts/${postId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -62,28 +101,54 @@ export default function NewPostPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || '发布失败');
+        throw new Error(errorData.error || '保存失败');
       }
 
-      const post = await response.json();
       setShowSuccessAlert(true);
       setTimeout(() => {
         setShowSuccessAlert(false);
-        router.push(`/posts/${post.slug}`);
+        router.push('/admin');
       }, 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : '发布失败，请重试');
+      setError(err instanceof Error ? err.message : '保存失败，请重试');
     } finally {
-      setIsPublishing(false);
+      setIsSaving(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="px-4 sm:px-0">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-gray-500">加载中...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="px-4 sm:px-0">
+        <div className="text-center py-12">
+          <h1 className="text-2xl font-semibold text-gray-900 mb-4">文章不存在</h1>
+          <p className="text-gray-600 mb-6">您要编辑的文章不存在或已被删除。</p>
+          <button
+            onClick={() => router.push('/admin')}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          >
+            返回文章列表
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 sm:px-0">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">写新文章</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">编辑文章</h1>
         <p className="mt-2 text-sm text-gray-700">
-          使用 Markdown 格式编写你的文章
+          修改你的文章内容
         </p>
       </div>
 
@@ -96,7 +161,7 @@ export default function NewPostPage() {
               </svg>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-green-800">文章发布成功！正在跳转到文章页面...</p>
+              <p className="text-sm font-medium text-green-800">文章保存成功！正在跳转到文章列表...</p>
             </div>
           </div>
         </div>
@@ -122,11 +187,11 @@ export default function NewPostPage() {
               </button>
               <button
                 type="button"
-                onClick={handlePublish}
-                disabled={isPublishing || !title.trim() || !slug.trim() || !content.trim()}
+                onClick={handleSave}
+                disabled={isSaving || !title.trim() || !slug.trim() || !content.trim()}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isPublishing ? '发布中...' : '发布文章'}
+                {isSaving ? '保存中...' : '保存更改'}
               </button>
             </div>
           </div>
