@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { BlogPost } from '@/types/blog';
 import TagsDisplay from '@/components/TagsDisplay';
+import Header from '@/components/Header';
 
 interface PostPageProps {
   params: {
@@ -38,6 +39,8 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-6 py-12">
+        <Header />
+        
         <header className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             {post.title}

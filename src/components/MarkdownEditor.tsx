@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import '@uiw/react-md-editor/markdown-editor.css';
 
@@ -16,7 +15,7 @@ interface MarkdownEditorProps {
   placeholder?: string;
 }
 
-export default function MarkdownEditor({ value, onChange, placeholder = "开始写你的文章..." }: MarkdownEditorProps) {
+export default function MarkdownEditor({ value, onChange }: MarkdownEditorProps) {
   return (
     <div className="w-full">
       <MDEditor
@@ -24,9 +23,7 @@ export default function MarkdownEditor({ value, onChange, placeholder = "开始�
         onChange={(val) => onChange(val || '')}
         data-color-mode="light"
         height={500}
-        placeholder={placeholder}
         preview="edit"
-        visibleDragBar={false}
       />
     </div>
   );

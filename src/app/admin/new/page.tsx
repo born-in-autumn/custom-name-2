@@ -29,6 +29,7 @@ export default function NewPostPage() {
       .replace(/[^\w\s-]/g, '') // 移除特殊字符
       .replace(/\s+/g, '-') // 空格替换为连字符
       .replace(/-+/g, '-') // 多个连字符替换为单个
+      .replace(/^\/+|\/+$/g, '') // 移除开头和结尾的斜杠
       .trim();
   };
 
@@ -56,7 +57,7 @@ export default function NewPostPage() {
         },
         body: JSON.stringify({
           title: title.trim(),
-          slug: slug.trim(),
+          slug: slug.trim().replace(/^\/+|\/+$/g, ''), // 确保slug不包含斜杠
           content: content.trim(),
           tags: tags.trim(),
         }),

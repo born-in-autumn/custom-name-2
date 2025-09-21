@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BlogService } from "@/services/blog";
+import Header from "@/components/Header";
 
 export default async function Home() {
   const posts = await BlogService.getAllPosts();
@@ -7,41 +8,13 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-6 py-12">
-        {/* 1. Header 部分 */}
-        <header className="mb-16">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 
-                className="text-3xl font-bold transition-colors hover:underline cursor-pointer" 
-                style={{ color: '#655cd6' }}
-              >
-                张三
-              </h1>
-            </div>
-            <nav className="flex space-x-8">
-              <Link
-                href="/contact"
-                className="font-medium transition-colors hover:underline"
-                style={{ color: '#655cd6' }}
-              >
-                Contact
-              </Link>
-              <Link
-                href="/about"
-                className="font-medium transition-colors hover:underline"
-                style={{ color: '#655cd6' }}
-              >
-                About
-              </Link>
-            </nav>
-          </div>
-        </header>
+        <Header />
 
         {/* 2. 自我介绍部分 */}
         <section className="mb-16">
           <div className="max-w-3xl">
             <h2 className="text-2xl font-medium text-gray-900 mb-4">
-              Hi there, I&apos;m 张三 👋
+              Hi 这里, 我是 客儿 👋
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed">
               Welcome to my website, where I write about technology, programming, 
@@ -53,50 +26,50 @@ export default async function Home() {
 
         {/* 3. 文章列表部分 */}
         <main>
-          <div className="space-y-6">
+          <div className="space-y-6 [&>*:not(:last-child)]:!mb-0">
             {/* 表头 */}
-            <div className="flex justify-between items-center" style={{ borderBottom: '3px solid rgb(231, 234, 239.5)' }}>
+            <div className="flex items-center pb-3" style={{ borderBottom: '3px solid rgb(231, 234, 239.5)' }}>
               <h3 
-                className="text-sm uppercase tracking-wide" 
-                style={{ fontWeight: 600, color: '#373c44' }}
+                className="uppercase tracking-wide flex-1" 
+                style={{ fontWeight: 600, color: '#373c44', fontSize: '24px', paddingLeft: '24px' }}
               >
-                Title
+                标题
               </h3>
               <h3 
-                className="text-sm uppercase tracking-wide" 
-                style={{ fontWeight: 600, color: '#373c44' }}
+                className="uppercase tracking-wide" 
+                style={{ fontWeight: 600, color: '#373c44', minWidth: '120px', fontSize: '24px' }}
               >
-                Date
+                日期
               </h3>
             </div>
             
             {posts.map((post) => (
               <article key={post.id} className="group">
-                <Link 
-                  href={`/posts/${post.slug}`}
-                  className="flex justify-between items-center py-4 border-b border-gray-100 hover:border-gray-200 transition-colors"
-                >
-                  <h3 
-                    className="font-medium transition-colors cursor-pointer"
+                <div className="flex items-center py-4 border-b border-gray-100 hover:border-gray-200 transition-colors">
+                  <Link 
+                    href={`/posts/${post.slug}`}
+                    className="font-medium transition-colors cursor-pointer flex-1"
                     style={{ 
                       color: '#181c25',
-                      fontSize: '24px',
+                      fontSize: '16px',
                       textDecoration: 'underline',
-                      textDecorationColor: 'rgba(24, 28, 37, 0.5)'
+                      textDecorationColor: 'rgba(24, 28, 37, 0.5)',
+                      paddingLeft: '24px'
                     }}
                   >
                     {post.title}
-                  </h3>
+                  </Link>
                   <time 
                     className="transition-colors"
                     style={{ 
                       color: '#181c25',
-                      fontSize: '24px'
+                      fontSize: '16px',
+                      minWidth: '120px'
                     }}
                   >
                     {new Date(post.createdAt).toISOString().split('T')[0]}
                   </time>
-                </Link>
+                </div>
               </article>
             ))}
             

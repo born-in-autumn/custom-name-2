@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "我的博客",
+  title: "Robin's Blog",
   description: "分享我的想法和经历",
+  icons: {
+    icon: '/logo.png',
+  },
 };
 
 export default function RootLayout({
